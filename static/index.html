@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Recoloca IA</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-mark">R</span>
+          <div>
+            <p class="eyebrow">Challenge Alura</p>
+            <h2>Recoloca IA</h2>
+          </div>
+        </div>
+
+        <nav class="menu" aria-label="Navegação do dashboard">
+          <button class="menu-item active" type="button" data-target="quiz">Criar Perfil</button>
+          <button class="menu-item" type="button" data-target="perfil">Perfil</button>
+          <button class="menu-item" type="button" data-target="vagas">Vagas</button>
+          <button class="menu-item" type="button" data-target="cursos">Cursos</button>
+        </nav>
+      </aside>
+
+      <section class="content">
+        <header class="topbar">
+          <div class="header-stack">
+            <p class="eyebrow">Orientação profissional</p>
+            <h1>Seu perfil de carreira</h1>
+            <div class="meta-row">
+              <span class="meta-pill">IA + carreira</span>
+              <span class="meta-pill soft">Atualização em tempo real</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button class="primary-button" id="submitProfile" type="button">Salvar perfil</button>
+            <button class="primary-button" id="openChatBtn" type="button">Abrir Chat</button>
+          </div>
+        </header>
+
+        <section class="panel-section" id="quizPanel" data-panel="quiz">
+          <div class="section-label">1. Quiz</div>
+          <form id="quizForm" class="quiz-card">
+            <div class="field-group">
+              <label for="user_name">Nome</label>
+              <input id="user_name" name="user_name" placeholder="Seu nome" />
+            </div>
+
+            <div class="field-group">
+              <label for="area">Área que mais te anima</label>
+              <select id="area" name="area">
+                <option value="Backend">Backend</option>
+                <option value="Frontend">Frontend</option>
+                <option value="Full Stack">Full Stack</option>
+                <option value="Dados">Dados</option>
+                <option value="Mobile">Mobile</option>
+                <option value="DevOps">DevOps</option>
+                <option value="UX/UI">UX/UI</option>
+                <option value="Cibersegurança">Cibersegurança</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="experience">Nível de experiência</label>
+              <select id="experience" name="experience">
+                <option value="Júnior">Júnior</option>
+                <option value="Pleno">Pleno</option>
+                <option value="Sênior">Sênior</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="work_mode">Como prefere trabalhar</label>
+              <select id="work_mode" name="work_mode">
+                <option value="Remoto">Remoto</option>
+                <option value="Híbrido">Híbrido</option>
+                <option value="Presencial">Presencial</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="location">Localização</label>
+              <input id="location" name="location" placeholder="São Paulo - SP" />
+            </div>
+
+            <div class="field-group">
+              <label for="soft_skills">Soft skills</label>
+              <input id="soft_skills" name="soft_skills" placeholder="comunicação, liderança, resolução de problemas" />
+              <div class="suggestions" id="soft_suggestions">
+                <button type="button" class="chip" onclick="addSkill('soft_skills','Comunicação')">Comunicação</button>
+                <button type="button" class="chip" onclick="addSkill('soft_skills','Liderança')">Liderança</button>
+                <button type="button" class="chip" onclick="addSkill('soft_skills','Trabalho em equipe')">Trabalho em equipe</button>
+                <button type="button" class="chip" onclick="addSkill('soft_skills','Resolução de problemas')">Resolução de problemas</button>
+                <button type="button" class="chip" onclick="addSkill('soft_skills','Proatividade')">Proatividade</button>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="career_goal">Objetivo de carreira</label>
+              <input id="career_goal" name="career_goal" placeholder="Crescimento técnico" />
+            </div>
+
+            <div class="field-group">
+              <label for="skills">Habilidades técnicas</label>
+              <input id="skills" name="skills" placeholder="Python, SQL, Git" />
+              <div class="suggestions" id="tech_suggestions">
+                <button type="button" class="chip" onclick="addSkill('skills','Python')">Python</button>
+                <button type="button" class="chip" onclick="addSkill('skills','SQL')">SQL</button>
+                <button type="button" class="chip" onclick="addSkill('skills','Git')">Git</button>
+                <button type="button" class="chip" onclick="addSkill('skills','FastAPI')">FastAPI</button>
+                <button type="button" class="chip" onclick="addSkill('skills','Docker')">Docker</button>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label for="target_roles">Funções alvo</label>
+              <input id="target_roles" name="target_roles" placeholder="Backend Engineer, Python Developer" />
+            </div>
+          </form>
+        </section>
+
+        <section class="panel-section is-hidden" id="perfilPanel" data-panel="perfil">
+          <div class="section-label">2. Perfil</div>
+          <div class="result-card">
+            <h2>Resumo do perfil</h2>
+            <div id="profileSummary" class="summary-box">
+              Preencha o formulário e salve o perfil para ver o resumo.
+            </div>
+          </div>
+        </section>
+
+        <section class="recommendation-grid is-hidden" id="recommendationGrid" data-panel="cards">
+          <div class="panel-section compact" id="vagasPanel" data-panel="vagas">
+            <div class="section-label">3. Vagas</div>
+            <div class="result-card">
+              <h2>Vagas sugeridas</h2>
+              <div id="vagaList" class="card-list"></div>
+            </div>
+          </div>
+
+          <div class="panel-section compact" id="cursosPanel" data-panel="cursos">
+            <div class="section-label">4. Cursos</div>
+            <div class="result-card">
+              <h2>Cursos sugeridos</h2>
+              <div id="cursoList" class="card-list"></div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="/config.js"></script>
+    <script>
+      // A URL do chat do n8n é carregada a partir de `static/config.js`.
+      const N8N_CHAT_URL = (window.APP_CONFIG && window.APP_CONFIG.N8N_CHAT_URL) || '';
+      const form = document.getElementById('quizForm');
+      const summary = document.getElementById('profileSummary');
+      const vagaList = document.getElementById('vagaList');
+      const cursoList = document.getElementById('cursoList');
+      const menuButtons = document.querySelectorAll('.menu-item');
+      const panels = document.querySelectorAll('[data-panel]');
+
+      function showPanel(target) {
+        menuButtons.forEach(button => {
+          const isActive = button.dataset.target === target;
+          button.classList.toggle('active', isActive);
+        });
+
+        const panelOrder = {
+          quiz: ['quizPanel'],
+          perfil: ['perfilPanel'],
+          vagas: ['recommendationGrid', 'vagasPanel'],
+          cursos: ['recommendationGrid', 'cursosPanel']
+        };
+
+        panels.forEach(panel => {
+          const shouldBeVisible = (panelOrder[target] || []).includes(panel.id);
+          panel.classList.toggle('is-hidden', !shouldBeVisible);
+        });
+
+        const scrollTargetId = {
+          quiz: 'quizPanel',
+          perfil: 'perfilPanel',
+          vagas: 'vagasPanel',
+          cursos: 'cursosPanel'
+        }[target] || 'quizPanel';
+
+        const scrollTarget = document.getElementById(scrollTargetId);
+        if (scrollTarget) {
+          scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        // If user opened the Quiz panel, also open the n8n chat modal
+        if (target === 'quiz') {
+          openChat();
+        }
+      }
+
+      menuButtons.forEach(button => {
+        button.addEventListener('click', () => showPanel(button.dataset.target));
+      });
+
+      async function loadRecommendations() {
+        const response = await fetch('/recommendations');
+        const data = await response.json();
+
+        const jobs = data.jobs || [];
+        const courses = data.courses || [];
+
+        vagaList.innerHTML = jobs.map(vaga => `
+          <article class="mini-card">
+            <div class="mini-card-header">
+              <h3>${vaga.title}</h3>
+              <span>${vaga.match}</span>
+            </div>
+            <p>${vaga.company}</p>
+            <p>${vaga.kind}</p>
+            ${vaga.url ? `<a class="mini-card-btn" href="${vaga.url}" target="_blank" rel="noopener">Ver vaga</a>` : `<button type="button">Ver vaga</button>`}
+          </article>
+        `).join('');
+
+        // add "Mais vagas +" card linking to a search for the area/location
+        const area = data.area || '';
+        const location = data.location || '';
+        const moreQuery = encodeURIComponent(`vagas ${area} ${location}`.trim());
+        const moreUrl = `https://www.google.com/search?q=${moreQuery}`;
+        vagaList.insertAdjacentHTML('beforeend', `
+          <article class="mini-card more-card">
+            <div class="mini-card-header">
+              <h3>+ Mais vagas</h3>
+            </div>
+            <p>Veja mais oportunidades relacionadas</p>
+            <a class="mini-card-btn" href="${moreUrl}" target="_blank" rel="noopener">Pesquisar</a>
+          </article>
+        `);
+
+        cursoList.innerHTML = courses.map(curso => `
+          <article class="mini-card">
+            <div class="mini-card-header">
+              <h3>${curso.title}</h3>
+              <span>${curso.level}</span>
+            </div>
+            <p>${curso.provider}</p>
+            ${curso.url ? `<a class="mini-card-btn" href="${curso.url}" target="_blank" rel="noopener">Ver curso</a>` : `<button type="button">Ver curso</button>`}
+          </article>
+        `).join('');
+      }
+
+      function parseList(value) {
+        return value
+          .split(',')
+          .map(item => item.trim())
+          .filter(Boolean);
+      }
+
+      function addSkill(fieldId, skill) {
+        const input = document.getElementById(fieldId);
+        const current = parseList(input.value || '');
+        if (!current.includes(skill)) {
+          current.push(skill);
+          input.value = current.join(', ');
+          input.dispatchEvent(new Event('input'));
+        }
+      }
+
+      function renderSummary(data) {
+        summary.innerHTML = `
+          <p><strong>Nome:</strong> ${data.user_name || 'Não informado'}</p>
+          <p><strong>Área:</strong> ${data.area || 'Não informado'}</p>
+          <p><strong>Nível:</strong> ${data.experience || 'Não informado'}</p>
+          <p><strong>Trabalho:</strong> ${data.work_mode || 'Não informado'}</p>
+          <p><strong>Localização:</strong> ${data.location || 'Não informado'}</p>
+          <p><strong>Soft skills:</strong> ${(data.soft_skills || []).join(', ') || 'Não informado'}</p>
+          <p><strong>Objetivo:</strong> ${data.career_goal || 'Não informado'}</p>
+          <p><strong>Habilidades:</strong> ${(data.skills || []).join(', ') || 'Não informado'}</p>
+          <p><strong>Funções alvo:</strong> ${(data.target_roles || []).join(', ') || 'Não informado'}</p>
+        `;
+      }
+
+      form.addEventListener('input', () => {
+        const payload = {
+          user_name: document.getElementById('user_name').value,
+          area: document.getElementById('area').value,
+          experience: document.getElementById('experience').value,
+          work_mode: document.getElementById('work_mode').value,
+          location: document.getElementById('location').value,
+          soft_skills: parseList(document.getElementById('soft_skills').value),
+          career_goal: document.getElementById('career_goal').value,
+          skills: parseList(document.getElementById('skills').value),
+          target_roles: parseList(document.getElementById('target_roles').value),
+        };
+        renderSummary(payload);
+      });
+
+      document.getElementById('submitProfile').addEventListener('click', async () => {
+        const payload = {
+          user_name: document.getElementById('user_name').value,
+          area: document.getElementById('area').value,
+          experience: document.getElementById('experience').value,
+          work_mode: document.getElementById('work_mode').value,
+          location: document.getElementById('location').value,
+          soft_skills: parseList(document.getElementById('soft_skills').value),
+          career_goal: document.getElementById('career_goal').value,
+          skills: parseList(document.getElementById('skills').value),
+          target_roles: parseList(document.getElementById('target_roles').value),
+        };
+
+        const response = await fetch('/profiles', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          renderSummary(data);
+          await loadRecommendations();
+          alert('Perfil salvo com sucesso!');
+        } else {
+          alert('Erro ao salvar perfil.');
+        }
+      });
+
+      loadRecommendations();
+
+      function getChatElements() {
+        return {
+          modal: document.getElementById('chatModal'),
+          messages: document.getElementById('chatMessages'),
+          form: document.getElementById('chatForm'),
+          input: document.getElementById('chatInput')
+        };
+      }
+
+      const profileChatState = {
+        started: false,
+        step: 0,
+        profile: {},
+        questions: [
+          'Claro! Para te ajudar melhor, qual é o seu nome?',
+          'Ótimo. Em qual área você quer seguir no momento? Pode ser Backend, Frontend, Dados, UX/UI ou DevOps.',
+          'Qual é o seu nível de experiência hoje: Júnior, Pleno ou Sênior?',
+          'Como você prefere trabalhar: Remoto, Híbrido ou Presencial?',
+          'E qual cidade ou região você está localizado(a)?',
+          'Quais habilidades técnicas você mais domina hoje? Ex.: Python, SQL, JavaScript, Java, React, Git, Docker.',
+          'Quais soft skills você considera seu diferencial? Ex.: Comunicação, Liderança, Trabalho em equipe, Proatividade, Resolução de problemas.',
+          'Se pudesse fortalecer uma habilidade agora, qual seria? Ex.: Python, SQL, Comunicação, Gestão de pessoas, UX, Design.'
+        ]
+      };
+
+      function appendMessage(role, text) {
+        const { messages } = getChatElements();
+        if (!messages) return;
+
+        const bubble = document.createElement('div');
+        bubble.className = `chat-bubble ${role}`;
+        bubble.textContent = text;
+        messages.appendChild(bubble);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function askProfileQuestion() {
+        if (!profileChatState.started) {
+          profileChatState.started = true;
+          profileChatState.step = 0;
+          profileChatState.profile = {};
+        }
+
+        if (profileChatState.step < profileChatState.questions.length) {
+          appendMessage('assistant', profileChatState.questions[profileChatState.step]);
+        }
+      }
+
+      async function saveProfileFromChat() {
+        const payload = {
+          user_name: profileChatState.profile.user_name || '',
+          area: profileChatState.profile.area || 'Backend',
+          experience: profileChatState.profile.experience || 'Júnior',
+          work_mode: profileChatState.profile.work_mode || 'Remoto',
+          location: profileChatState.profile.location || '',
+          soft_skills: parseList(profileChatState.profile.soft_skills || ''),
+          career_goal: '',
+          skills: parseList(profileChatState.profile.skills || ''),
+          target_roles: []
+        };
+
+        const fields = {
+          user_name: document.getElementById('user_name'),
+          area: document.getElementById('area'),
+          experience: document.getElementById('experience'),
+          work_mode: document.getElementById('work_mode'),
+          location: document.getElementById('location'),
+          soft_skills: document.getElementById('soft_skills'),
+          skills: document.getElementById('skills')
+        };
+
+        Object.entries(payload).forEach(([key, value]) => {
+          const input = fields[key];
+          if (input) {
+            input.value = value;
+          }
+        });
+
+        try {
+          const response = await fetch('/profiles', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            renderSummary(data);
+            await loadRecommendations();
+            showPanel('vagas');
+            appendMessage('assistant', `Perfeito, ${data.user_name || 'você'}! Já tenho suas informações e posso te recomendar vagas e cursos que fazem mais sentido para o seu perfil e objetivo profissional.`);
+          } else {
+            appendMessage('assistant', 'Tudo bem. Posso continuar te ajudando com vagas e cursos sem precisar salvar o perfil agora.');
+          }
+        } catch (error) {
+          appendMessage('assistant', 'Tudo bem. Posso continuar te ajudando com vagas e cursos sem precisar salvar o perfil agora.');
+        }
+      }
+
+      function setChatOpenState(isOpen) {
+        const { modal } = getChatElements();
+        if (!modal) return;
+
+        modal.classList.toggle('open', isOpen);
+        modal.style.display = isOpen ? 'block' : 'none';
+        modal.setAttribute('aria-hidden', String(!isOpen));
+        modal.dataset.open = String(isOpen);
+      }
+
+      async function sendAssistantMessage(messageText) {
+        const { input } = getChatElements();
+        const value = (messageText || '').trim();
+        if (!value) return;
+
+        setChatOpenState(true);
+        appendMessage('user', value);
+        if (input) input.value = '';
+
+        if (profileChatState.started && profileChatState.step < profileChatState.questions.length) {
+          const fieldMap = ['user_name', 'area', 'experience', 'work_mode', 'location', 'skills', 'soft_skills', 'career_goal'];
+          const currentField = fieldMap[profileChatState.step];
+          profileChatState.profile[currentField] = value;
+          profileChatState.step += 1;
+
+          if (profileChatState.step < profileChatState.questions.length) {
+            appendMessage('assistant', profileChatState.questions[profileChatState.step]);
+            return;
+          }
+
+          await saveProfileFromChat();
+          profileChatState.started = false;
+          profileChatState.step = 0;
+          return;
+        }
+
+        try {
+          const response = await fetch('/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: value })
+          });
+          const data = await response.json();
+          appendMessage('assistant', data.reply || 'Posso te ajudar com vagas, cursos e perfil profissional.');
+        } catch (error) {
+          appendMessage('assistant', 'Não consegui responder agora. Tente novamente em alguns segundos.');
+        }
+
+        setChatOpenState(true);
+      }
+
+      function openChat() {
+        const { messages } = getChatElements();
+        setChatOpenState(true);
+
+        if (!messages || !messages.children.length) {
+          profileChatState.started = true;
+          profileChatState.step = 0;
+          profileChatState.profile = {};
+          appendMessage('assistant', 'Olá, meu nome é Eruya. Posso te ajudar a descobrir o melhor caminho profissional para você?');
+          setTimeout(() => {
+            appendMessage('assistant', profileChatState.questions[0]);
+          }, 150);
+        }
+      }
+
+      function closeChat() {
+        setChatOpenState(false);
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const { form: chatForm, input: chatInput } = getChatElements();
+        if (!chatForm || !chatInput) return;
+
+        const submitChatMessage = () => {
+          setChatOpenState(true);
+          sendAssistantMessage(chatInput.value);
+        };
+
+        chatForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          submitChatMessage();
+        });
+
+        chatInput.addEventListener('focus', () => {
+          setChatOpenState(true);
+        });
+
+        chatInput.addEventListener('input', () => {
+          setChatOpenState(true);
+        });
+
+        chatInput.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            event.stopPropagation();
+            chatForm.requestSubmit();
+          }
+        });
+      });
+    </script>
+
+    <script>
+      // Attach header chat button
+      const openChatBtn = document.getElementById('openChatBtn');
+      if (openChatBtn) {
+        openChatBtn.addEventListener('click', () => {
+          openChat();
+        });
+      }
+    </script>
+
+    <!-- Chat modal -->
+    <div id="chatModal" class="chat-modal" aria-hidden="true">
+      <div class="chat-modal-backdrop" onclick="closeChat()"></div>
+      <div class="chat-modal-panel chat-panel-python">
+        <header class="chat-modal-header">
+          <h3>Assistente Recoloca IA</h3>
+          <button type="button" onclick="closeChat()" aria-label="Fechar">✕</button>
+        </header>
+        <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
+        <form id="chatForm" class="chat-form">
+          <input id="chatInput" type="text" placeholder="Digite sua mensagem..." autocomplete="off" />
+          <button type="submit">Enviar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Opção alternativa: widget oficial do n8n (não ativa por padrão)
+         Uso:
+         - Chame no console: `initN8nWidget()`
+         - Ou passe opções: `initN8nWidget({ target: '#n8n-chat', mode: 'fullscreen' })`
+         Observação: requer `window.APP_CONFIG.N8N_CHAT_URL` (fornecido por /config.js).
+    -->
+    <script type="module">
+      window.initN8nWidget = async function ({ target = undefined, mode = 'widget' } = {}) {
+        const url = (window.APP_CONFIG && window.APP_CONFIG.N8N_CHAT_URL) || '';
+        if (!url) {
+          console.warn('N8N_CHAT_URL não configurado (window.APP_CONFIG.N8N_CHAT_URL)');
+          return;
+        }
+
+        try {
+          const mod = await import('https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js');
+          const createChat = mod.createChat || (mod.default && mod.default.createChat) || mod;
+          // Forçar modo 'widget' (botão flutuante).
+          // Tenta também forçar idioma para português (se o widget suportar 'locale').
+          const opts = { webhookUrl: url, mode: 'widget', locale: 'pt-BR' };
+          if (target) opts.target = target;
+          createChat(opts);
+        } catch (err) {
+          console.error('Erro ao carregar widget n8n:', err);
+        }
+      };
+    </script>
+  </body>
+</html>
