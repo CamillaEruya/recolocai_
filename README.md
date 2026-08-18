@@ -1,4 +1,4 @@
-# Challenge Alura — Backend + Webhook (n8n)
+# recolocai_ — Backend + Webhook (n8n)
 
 Este repositório contém um scaffold simples em Python com FastAPI para receber webhooks do n8n, um frontend minimalista para visualizar payloads e arquivos básicos para deploy.
 
